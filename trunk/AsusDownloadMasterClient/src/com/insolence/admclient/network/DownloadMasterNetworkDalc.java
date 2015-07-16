@@ -8,9 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,6 +74,10 @@ public class DownloadMasterNetworkDalc {
 	private String confirmDownloadUrlString(){
 		return "http://" + getConnectionString() + "/dm_uploadbt.cgi?filename=%s&download_type=%s";
 	}
+	
+	private String webAuthUrlString(){
+		return "http://" + _preferences.getWebServerAddress() + ":" + _preferences.getWebServerPort() + "/check.asp?flag=&login_username=" + _preferences.getLogin() + "&login_passwd=" + _preferences.getPassword();
+	}
 
 	
 	protected boolean tryGetItemList(Holder<String> result){
@@ -95,10 +97,11 @@ public class DownloadMasterNetworkDalc {
 		return true;*/
 		
 		try{
-			
+			initWebAuthCookie();		
 			URL url = new URL(getListUrlString());
-		    URLConnection con = (HttpURLConnection) url.openConnection();	    
-		    con.addRequestProperty("Authorization", getAuthorizationString());		
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		    setWebAuthCookie(con);
+		    con.addRequestProperty("Authorization", getAuthorizationString());
 			InputStream stream = con.getInputStream();
 		    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
 		    String temp;
@@ -137,9 +140,10 @@ public class DownloadMasterNetworkDalc {
 	
 	private boolean sendGetRequest(String urlPath){
 		try{
-			
+			initWebAuthCookie();
 			URL url = new URL(urlPath);
-		    URLConnection con = (HttpURLConnection) url.openConnection();	    
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		    setWebAuthCookie(con);
 		    con.addRequestProperty("Authorization", getAuthorizationString());
 		    con.addRequestProperty("X-Requested-With", "XMLHttpRequest");
 			con.getInputStream();
@@ -161,16 +165,40 @@ public class DownloadMasterNetworkDalc {
 	private static String newLine = "\r\n";
 	private static int maxBufferSize = 4096;
 	
+	private String _webAuthCookie;
+	
+	private void initWebAuthCookie(){
+		if (_webAuthCookie != null)
+			return;
+		try{		
+			URL url = new URL(webAuthUrlString());
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setInstanceFollowRedirects(false);
+		    _webAuthCookie = con.getHeaderField("Set-Cookie");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	private void setWebAuthCookie(HttpURLConnection conn){
+		if (_webAuthCookie != null){
+			conn.addRequestProperty("Cookie", _webAuthCookie);
+		}
+	}
+	
 	private SendFileResult sendFilePostRequest(String fileName, InputStream bodyInputStream) throws MalformedURLException, IOException {
 		
 		String boundary = "---------------------------" + new RandomGuid().toString(13);	    
-		    
+		
+		initWebAuthCookie();
+		
 		HttpURLConnection con = (HttpURLConnection) new URL(uploadFileUrlString()).openConnection();
 		con.setDoInput(true);
 		con.setDoOutput(true);
 		con.setUseCaches(false);
 		con.setRequestMethod("POST");
 		con.setRequestProperty("Connection", "Keep-Alive");
+		setWebAuthCookie(con);
 		con.setRequestProperty("Authorization", getAuthorizationString());
 		con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 		    
