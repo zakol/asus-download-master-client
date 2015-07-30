@@ -23,12 +23,16 @@ public class FriendlyNameUtil {
 		try{
 			String scheme = uri.getScheme();
 			if (scheme.equals("content")) {
-			    String[] proj = { MediaStore.Images.Media.TITLE };
+			    String[] proj = { MediaStore.Images.Media.TITLE, MediaStore.MediaColumns.DISPLAY_NAME };
 			    Cursor cursor = _context.getContentResolver().query(uri, proj, null, null, null);
 			    if (cursor != null && cursor.getCount() != 0) {
-			        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE);
+			        int mediaTitleColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE);
+			        int displayNameColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
 			        cursor.moveToFirst();
-			        result = cursor.getString(columnIndex);
+			        result = cursor.getString(displayNameColumnIndex);
+			        if (result == null){
+			        	result = cursor.getString(mediaTitleColumnIndex);
+			        }
 			    }
 			}
 		}catch(Exception e){

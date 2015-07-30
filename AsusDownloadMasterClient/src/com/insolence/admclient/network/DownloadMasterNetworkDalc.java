@@ -7,7 +7,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -186,7 +189,7 @@ public class DownloadMasterNetworkDalc {
 		}
 	}
 	
-	private SendFileResult sendFilePostRequest(String fileName, InputStream bodyInputStream) throws MalformedURLException, IOException {
+	private SendFileResult sendFilePostRequest(String fileName, InputStream bodyInputStream) throws MalformedURLException, IOException, URISyntaxException {
 		
 		String boundary = "---------------------------" + new RandomGuid().toString(13);	    
 		
@@ -197,15 +200,18 @@ public class DownloadMasterNetworkDalc {
 		con.setDoOutput(true);
 		con.setUseCaches(false);
 		con.setRequestMethod("POST");
-		con.setRequestProperty("Connection", "Keep-Alive");
+		con.setRequestProperty("Connection", "keep-alive");
 		setWebAuthCookie(con);
 		con.setRequestProperty("Authorization", getAuthorizationString());
-		con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+		con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 		    
 		DataOutputStream dos = new DataOutputStream(con.getOutputStream());
 
 		dos.writeBytes("--" + boundary + newLine);
-		dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + fileName + "\"" + newLine);
+		dos.writeBytes("Content-Disposition: form-data; name=\"filename\"; filename=\"");
+		dos.write(fileName.getBytes("UTF-8"));
+		dos.writeBytes("\"" + newLine);
+		
 		dos.writeBytes("Content-Type: application/x-bittorrent" + newLine + newLine);
 		    
 		int bytesRead;
