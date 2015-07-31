@@ -2,7 +2,7 @@ package com.insolence.admclient;
 
 import java.util.List;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -116,6 +116,7 @@ public class DownloadItemListActivity extends ActionBarActivity implements OnIte
 		final String fileName = new FriendlyNameUtil(this).getUriFileName(fileUri);
     	
 		new AlertDialog.Builder(this)
+			   .setTitle(getStr(R.string.menu_item_add_torrent))
 	           .setMessage(String.format(getStr(R.string.confirmation_message_download_torrent), fileName))
 	           .setCancelable(false)
 	           .setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {
@@ -128,6 +129,7 @@ public class DownloadItemListActivity extends ActionBarActivity implements OnIte
 	
 	private void sendLinkToServer(final String link, final String linkName){
 		new AlertDialog.Builder(this)
+		.setTitle(getStr(R.string.menu_item_add_link))
         .setMessage(String.format(getStr(R.string.confirmation_message_download_magnet_link), linkName))
         .setCancelable(false)
         .setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {
@@ -277,6 +279,7 @@ public class DownloadItemListActivity extends ActionBarActivity implements OnIte
 	
 	public void onDeleteFinishedClick(View v) {
 		new AlertDialog.Builder(this)
+		.setTitle(getStr(R.string.menu_item_delete_completed))
         .setMessage(getStr(R.string.confirmation_message_delete_finished))
         .setCancelable(false)
         .setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {
@@ -438,27 +441,34 @@ public class DownloadItemListActivity extends ActionBarActivity implements OnIte
 		addMagnetMenuItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {		
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-	        	final EditText txtUrl = new EditText(DownloadItemListActivity.this);
-	        	txtUrl.setSingleLine();
-	        	txtUrl.setHint(getStr(R.string.add_link_alert_hint));       	
-	        	Holder<String> clipboardText = new Holder<String>("");
+				
+	        	AlertDialog.Builder alert = new AlertDialog.Builder(DownloadItemListActivity.this)
+	        			.setMessage(getResources().getString(R.string.add_link_alert_message))
+	        			.setTitle(getResources().getString(R.string.add_link_alert_title));
+	        	
+	    	    View dialogView = getLayoutInflater().inflate( R.layout.dialog_add_link, null );
+    	    
+	    	    final EditText input = (EditText) dialogView.findViewById(R.id.add_link_field);
+	        
+	    	    Holder<String> clipboardText = new Holder<String>("");
 	        	if (ClipboardUtil.TryGetTextFromClipboard(DownloadItemListActivity.this, clipboardText))
-	        		txtUrl.setText(clipboardText.value);
-	        	new AlertDialog.Builder(DownloadItemListActivity.this)
-		        	 .setTitle(getStr(R.string.add_link_alert_title))
-		        	 .setMessage(getStr(R.string.add_link_alert_message))
-		        	 .setView(txtUrl)
-		        	 .setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {
-		        	    public void onClick(DialogInterface dialog, int whichButton) {
-			        	    String link = txtUrl.getText().toString();
-			        	    if (link == null || link.length() == 0)
-			        	    	return;
-			      			final String fileName = FriendlyNameUtil.GetNativeFileNameFromMagnetLink(link);     	
-			    			sendLinkToServer(link, fileName);       	      
-		        	    }
-		        	  })
-		        	 .setNegativeButton(getStr(R.string.basic_cancel), null)
-		        	 .show(); 	        	
+	        		input.setText(clipboardText.value);
+	    	    
+	    	    alert.setView(dialogView);
+	    	    
+	    	    alert.setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {
+	        	    public void onClick(DialogInterface dialog, int whichButton) {
+		        	    String link = input.getText().toString();
+		        	    if (link == null || link.length() == 0)
+		        	    	return;
+		      			final String fileName = FriendlyNameUtil.GetNativeFileNameFromMagnetLink(link);     	
+		    			sendLinkToServer(link, fileName);       	      
+	        	    }
+	        	  });  
+	        	  
+	    	    alert.setNegativeButton(getStr(R.string.basic_cancel), null);
+	    	    alert.show();
+	        	
 	        	return true;
 			}
 		});	
