@@ -7,6 +7,7 @@
 	    <item name="android:windowContentOverlay">@null</item>
 	    <item name="colorAccent">@color/main_blue</item>
     	<item name="android:textColorSecondary">@color/main_grey</item>
+    	<item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
 	</style>
 	
 	<style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -17,11 +18,16 @@
 	    <item name="android:windowContentOverlay">@null</item>
 	    <item name="colorAccent">@color/main_blue</item>
     	<item name="android:textColorSecondary">@color/main_grey</item>
+    	<item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
 	</style>
 
 	<style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
 	    <item name="android:background"  tools:ignore="NewApi">@drawable/action_bar_background</item>
 	    <item name="background">@drawable/action_bar_background</item>
 	</style>
+	
+	<style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/main_blue</item>
+    </style>
 
 </resources>

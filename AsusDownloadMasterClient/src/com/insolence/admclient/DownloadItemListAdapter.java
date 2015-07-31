@@ -9,7 +9,7 @@ import com.insolence.admclient.entity.DownloadItem;
 import com.insolence.admclient.expandable.IExpandCollapseManager;
 import com.todddavies.components.progressbar.ProgressWheel;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.internal.view.menu.MenuBuilder;
@@ -186,6 +186,7 @@ public class DownloadItemListAdapter extends ArrayAdapter<DownloadItem>{
 			if (_alertText != null){
 				
 				new AlertDialog.Builder(getContext())
+				   .setTitle(getStr(R.string.menu_group_manage_downloads))
 		           .setMessage(_alertText)
 		           .setCancelable(false)
 		           .setPositiveButton(getStr(R.string.basic_yes), new DialogInterface.OnClickListener() {

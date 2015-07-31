@@ -11,7 +11,10 @@
 					android:layout_height="wrap_content"
 					android:text="@string/dialog_select_files_to_download_select_all"
 					android:textColor="@color/main_blue"
-					android:layout_margin="4dp"
+					android:layout_margin="9dp"
+					android:textAllCaps="true"
+					android:textSize="12sp"
+					android:textStyle="bold"
 					android:clickable="true"/>
          		<TextView
          		    android:id="@+id/select_none_hyperlink"
@@ -19,6 +22,9 @@
 					android:layout_height="wrap_content"
 					android:text="@string/dialog_select_files_to_download_select_none"
 					android:textColor="@color/main_blue"
-					android:layout_margin="4dp"
+					android:layout_margin="9dp"
+					android:textAllCaps="true"
+					android:textSize="12sp"
+					android:textStyle="bold"
 					android:clickable="true"/>
          	</LinearLayout>

@@ -3,19 +3,13 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="vertical"
-         android:background="#FFFFFF">         
-         	<TextView
-         	     android:id="@+id/header_block"
-				 android:textColor="#FFFFFF"
-	     	     android:layout_width="match_parent"
-				 android:layout_height="wrap_content"
-	     	     android:text="@string/dialog_select_files_to_download_title"
-	     	     android:padding="10dp"
-	     	     android:textSize="18sp"
-	     	     android:background="@drawable/action_bar_background"/>  	    
+         android:paddingLeft="20dp"
+    	 android:paddingRight="20dp">         	    
          	<ListView
 		        android:id="@+id/files_list"
 		        android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:dividerHeight="0dp"
+				android:divider="@null"
 		        />
      </LinearLayout>

@@ -2,15 +2,15 @@ package com.insolence.admclient.asynctasks;
 
 import com.insolence.admclient.DownloadItemListActivity;
 import com.insolence.admclient.R;
-import com.insolence.admclient.SelectFilesDialog;
-import com.insolence.admclient.SelectFilesDialog.IDialogResultProcessor;
+import com.insolence.admclient.SelectFilesAlertDialogBuilder;
+import com.insolence.admclient.SelectFilesAlertDialogBuilder.IDialogResultProcessor;
 import com.insolence.admclient.entity.DownloadInfo;
 import com.insolence.admclient.entity.SendFileResult;
 import com.insolence.admclient.entity.SendFileResult.SendFileResultEnum;
 import com.insolence.admclient.network.DownloadMasterNetworkDalc;
 import com.insolence.admclient.storage.PreferenceAccessor;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -47,8 +47,8 @@ public class SendTorrentTask extends SendTaskBase{
 				}	
 		}			
 		return new AsyncTaskResult(true, "Need additional action", new Runnable(){		
-			public void run() {		
-				final Dialog dialog = new SelectFilesDialog(_context, downloadInfo, new IDialogResultProcessor() {			
+			public void run() {
+				SelectFilesAlertDialogBuilder.build((Activity)_context, downloadInfo, new IDialogResultProcessor() {			
 					public void process(final String argument) {
 						new AsyncTask<Void, Void, Void>(){
 							protected Void doInBackground(Void... params) {
@@ -62,8 +62,7 @@ public class SendTorrentTask extends SendTaskBase{
 							}
 						}.execute();			
 					}
-				});				
-				dialog.show();
+				});
 			}
 			
 		});
