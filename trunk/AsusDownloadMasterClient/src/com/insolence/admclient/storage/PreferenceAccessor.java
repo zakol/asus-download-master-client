@@ -68,7 +68,7 @@ public class PreferenceAccessor {
 	private static final String webServerAddrPref = "webServerAddrPref";
 	
 	public String getWebServerAddress(){
-		return getPrefs().getString(webServerAddrPref, "192.168.1.1");
+		return getPrefs().getString(webServerAddrPref, "192.168.1.1").replaceAll("http://", "");
 	}
 	
 	private static final String webServerPortPref = "webServerPortPref";

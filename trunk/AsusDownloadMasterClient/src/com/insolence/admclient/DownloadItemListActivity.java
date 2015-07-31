@@ -3,6 +3,7 @@ package com.insolence.admclient;
 import java.util.List;
 
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.internal.view.menu.MenuBuilder;
 import android.support.v7.internal.view.menu.MenuPopupHelper;
 import android.support.v7.widget.Toolbar;
@@ -48,7 +48,7 @@ import com.insolence.admclient.util.Holder;
 import com.insolence.admclient.util.FriendlyNameUtil;
 import com.insolence.admclient.util.LanguageHelper;
 
-public class DownloadItemListActivity extends ActionBarActivity implements OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
+public class DownloadItemListActivity extends AppCompatActivity implements OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
 	
 	private static DownloadItemListActivity _current;
 	
